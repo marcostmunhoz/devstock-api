@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class BancoInicial extends Migration
+class TabelasIniciais extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,6 @@ class BancoInicial extends Migration
      */
     public function up()
     {
-        Schema::create('usuarios', function (Blueprint $table) {
-            $table->increments('id_usuario');
-            $table->string('nm_usuario', 50);
-            $table->string('login', 20)->unique();
-            $table->string('senha', 60);
-            $table->boolean('flg_status')->default(1);
-            $table->timestamp('dt_cadastro')->nullable();
-            $table->timestamp('dt_edicao')->nullable();
-        });
-
         Schema::create('fornecedores', function (Blueprint $table) {
             $table->increments('id_fornecedor');
             $table->string('razao_social', 100);
@@ -39,8 +29,8 @@ class BancoInicial extends Migration
             $table->string('ddd_telefone', 2);
             $table->string('nr_telefone', 9);
             $table->enum('tp_telefone', [ 1, 2, 3 ])->comment('1 = Comercial, 2 = Contato, 3 = Outro');
-            $table->integer('id_fornecedor');
-            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
+            $table->integer('id_fornecedor', 10);
+            $table->foreign('id_fornecedor')->references('fornecedor')->on('id_fornecedor');
         });
 
         Schema::create('produtos', function (Blueprint $table) {
@@ -51,13 +41,13 @@ class BancoInicial extends Migration
             $table->integer('nr_qtd_estocada');
             $table->timestamp('dt_cadastro')->nullable();
             $table->timestamp('dt_edicao')->nullable();
-            $table->integer('id_fornecedor');
+            $table->integer('id_fornecedor', 10);
             $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
         });
 
         Schema::create('produtos_fornecedor', function (Blueprint $table) {
-            $table->integer('id_produto');
-            $table->integer('id_fornecedor');
+            $table->integer('id_produto', 10);
+            $table->integer('id_fornecedor', 10);
             $table->decimal('nr_preco_compra', 6, 2);
             $table->primary([ 'id_produto', 'id_fornecedor' ]);
             $table->foreign('id_produto')->references('produtos')->on('id_produto');
@@ -69,7 +59,7 @@ class BancoInicial extends Migration
             $table->enum('tp_movimentacao', [ 1, 2 ])->comment('1 = entrada, 2 = saída');
             $table->timestamp('dthr_movimentacao')->nullable();
             $table->string('ds_movimentacao', 50);
-            $table->integer('id_usuario');
+            $table->integer('id_usuario', 10);
             $table->timestamp('dt_cadastro')->nullable();
             $table->foreign('id_usuario')->references('usuarios')->on('id_usuario');
         });
@@ -90,6 +80,11 @@ class BancoInicial extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('produtos_movimentacoes');
+        Schema::dropIfExists('movimentacoes');
+        Schema::dropIfExists('produtos_fornecedor');
+        Schema::dropIfExists('produtos');
+        Schema::dropIfExists('telefones');
+        Schema::dropIfExists('fornecedores');
     }
 }
