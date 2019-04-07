@@ -50,7 +50,7 @@ class TabelasIniciais extends Migration
             $table->unsignedInteger('id_fornecedor', false);
             $table->decimal('nr_preco_compra', 6, 2);
             $table->primary([ 'id_produto', 'id_fornecedor' ]);
-            $table->foreign('id_produto')->references('produtos')->on('id_produto');
+            $table->foreign('id_produto')->references('id_produto')->on('produtos');
             $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedores');
         });
 
