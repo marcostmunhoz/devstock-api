@@ -30,7 +30,7 @@ class TabelasIniciais extends Migration
             $table->string('nr_telefone', 9);
             $table->enum('tp_telefone', [ 1, 2, 3 ])->comment('1 = Comercial, 2 = Contato, 3 = Outro');
             $table->unsignedInteger('id_fornecedor', false);
-            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
+            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedores');
         });
 
         Schema::create('produtos', function (Blueprint $table) {
@@ -42,7 +42,7 @@ class TabelasIniciais extends Migration
             $table->timestamp('dt_cadastro')->nullable();
             $table->timestamp('dt_edicao')->nullable();
             $table->unsignedInteger('id_fornecedor', false);
-            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
+            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedores');
         });
 
         Schema::create('produtos_fornecedor', function (Blueprint $table) {
@@ -51,7 +51,7 @@ class TabelasIniciais extends Migration
             $table->decimal('nr_preco_compra', 6, 2);
             $table->primary([ 'id_produto', 'id_fornecedor' ]);
             $table->foreign('id_produto')->references('produtos')->on('id_produto');
-            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
+            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedores');
         });
 
         Schema::create('movimentacoes', function (Blueprint $table) {
