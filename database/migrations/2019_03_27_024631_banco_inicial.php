@@ -19,8 +19,8 @@ class BancoInicial extends Migration
             $table->string('login', 20)->unique();
             $table->string('senha', 60);
             $table->boolean('flg_status')->default(1);
-            $table->timestamp('dt_cadastro');
-            $table->timestamp('dt_edicao');
+            $table->timestamp('dt_cadastro')->nullable();
+            $table->timestamp('dt_edicao')->nullable();
         });
 
         Schema::create('fornecedores', function (Blueprint $table) {
@@ -30,8 +30,8 @@ class BancoInicial extends Migration
             $table->string('cnpj_fornecedor', 14)->unique();
             $table->string('end_fornecedor', 150);
             $table->boolean('flg_status')->default(1);
-            $table->timestamp('dt_cadastro');
-            $table->timestamp('dt_edicao');
+            $table->timestamp('dt_cadastro')->nullable();
+            $table->timestamp('dt_edicao')->nullable();
         });
 
         Schema::create('telefones', function (Blueprint $table) {
@@ -49,8 +49,8 @@ class BancoInicial extends Migration
             $table->string('nm_produto', 50);
             $table->boolean('flg_status')->default(1);
             $table->integer('nr_qtd_estocada');
-            $table->timestamp('dt_cadastro');
-            $table->timestamp('dt_edicao');
+            $table->timestamp('dt_cadastro')->nullable();
+            $table->timestamp('dt_edicao')->nullable();
             $table->integer('id_fornecedor');
             $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
         });
@@ -67,10 +67,10 @@ class BancoInicial extends Migration
         Schema::create('movimentacoes', function (Blueprint $table) {
             $table->increments('id_movimentacao');
             $table->enum('tp_movimentacao', [ 1, 2 ])->comment('1 = entrada, 2 = saída');
-            $table->timestamp('dthr_movimentacao');
+            $table->timestamp('dthr_movimentacao')->nullable();
             $table->string('ds_movimentacao', 50);
             $table->integer('id_usuario');
-            $table->timestamp('dt_cadastro');
+            $table->timestamp('dt_cadastro')->nullable();
             $table->foreign('id_usuario')->references('usuarios')->on('id_usuario');
         });
 
