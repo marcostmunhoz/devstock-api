@@ -41,8 +41,6 @@ class TabelasIniciais extends Migration
             $table->unsignedInteger('nr_qtd_estocada', false);
             $table->timestamp('dt_cadastro')->nullable();
             $table->timestamp('dt_edicao')->nullable();
-            $table->unsignedInteger('id_fornecedor', false);
-            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedores');
         });
 
         Schema::create('produtos_fornecedor', function (Blueprint $table) {
