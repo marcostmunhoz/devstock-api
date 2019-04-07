@@ -18,7 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/teste', function() {
-    return response()->json([
-        'result' => 'ok'
-    ]);
+    return response()->json(\App\Produto::with(['fornecedores', 'movimentacoes'])->all());
 });
