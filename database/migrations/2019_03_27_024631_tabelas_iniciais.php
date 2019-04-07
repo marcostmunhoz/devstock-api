@@ -29,7 +29,7 @@ class TabelasIniciais extends Migration
             $table->string('ddd_telefone', 2);
             $table->string('nr_telefone', 9);
             $table->enum('tp_telefone', [ 1, 2, 3 ])->comment('1 = Comercial, 2 = Contato, 3 = Outro');
-            $table->smallInteger('id_fornecedor', false, true);
+            $table->integer('id_fornecedor', false, true);
             $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
         });
 
@@ -41,13 +41,13 @@ class TabelasIniciais extends Migration
             $table->integer('nr_qtd_estocada');
             $table->timestamp('dt_cadastro')->nullable();
             $table->timestamp('dt_edicao')->nullable();
-            $table->smallInteger('id_fornecedor', 10);
+            $table->integer('id_fornecedor', 10);
             $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
         });
 
         Schema::create('produtos_fornecedor', function (Blueprint $table) {
-            $table->smallInteger('id_produto', false, true);
-            $table->smallInteger('id_fornecedor', false, true);
+            $table->integer('id_produto', false, true);
+            $table->integer('id_fornecedor', false, true);
             $table->decimal('nr_preco_compra', 6, 2);
             $table->primary([ 'id_produto', 'id_fornecedor' ]);
             $table->foreign('id_produto')->references('produtos')->on('id_produto');
@@ -59,14 +59,14 @@ class TabelasIniciais extends Migration
             $table->enum('tp_movimentacao', [ 1, 2 ])->comment('1 = entrada, 2 = saída');
             $table->timestamp('dthr_movimentacao')->nullable();
             $table->string('ds_movimentacao', 50);
-            $table->smallInteger('id_usuario', false, true);
+            $table->integer('id_usuario', false, true);
             $table->timestamp('dt_cadastro')->nullable();
             $table->foreign('id_usuario')->references('usuarios')->on('id_usuario');
         });
 
         Schema::create('produtos_movimentacoes', function (Blueprint $table) {
-            $table->smallInteger('id_produto', false, true);
-            $table->smallInteger('id_movimentacao', false, true);
+            $table->integer('id_produto', false, true);
+            $table->integer('id_movimentacao', false, true);
             $table->integer('nr_qtd_movimentada');
             $table->decimal('vlr_unitario');
             $table->primary([ 'id_produto', 'id_movimentacao' ]);
