@@ -9,6 +9,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $primaryKey = 'id_usuario';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,4 +28,8 @@ class User extends Authenticatable
     protected $hidden = [
         'senha', 'remember_token',
     ];
+
+    public function movimentacoes() {
+        return $this->hasMany(Movimentacao::class, 'id_usuario', 'id_usuario');
+    }
 }
