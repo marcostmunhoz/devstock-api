@@ -29,7 +29,7 @@ class TabelasIniciais extends Migration
             $table->string('ddd_telefone', 2);
             $table->string('nr_telefone', 9);
             $table->enum('tp_telefone', [ 1, 2, 3 ])->comment('1 = Comercial, 2 = Contato, 3 = Outro');
-            $table->integer('id_fornecedor', false, true);
+            $table->unsignedInteger('id_fornecedor', false);
             $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
         });
 
@@ -38,20 +38,20 @@ class TabelasIniciais extends Migration
             $table->string('cod_produto', 15)->unique();
             $table->string('nm_produto', 50);
             $table->boolean('flg_status')->default(1);
-            $table->integer('nr_qtd_estocada');
+            $table->unsignedInteger('nr_qtd_estocada', false);
             $table->timestamp('dt_cadastro')->nullable();
             $table->timestamp('dt_edicao')->nullable();
-            $table->integer('id_fornecedor', 10);
+            $table->unsignedInteger('id_fornecedor', false);
             $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
         });
 
         Schema::create('produtos_fornecedor', function (Blueprint $table) {
-            $table->integer('id_produto', false, true);
-            $table->integer('id_fornecedor', false, true);
+            $table->unsignedInteger('id_produto', false);
+            $table->unsignedInteger('id_fornecedor', false);
             $table->decimal('nr_preco_compra', 6, 2);
             $table->primary([ 'id_produto', 'id_fornecedor' ]);
             $table->foreign('id_produto')->references('produtos')->on('id_produto');
-            $table->foreign('id_fornecedor')->references('fornecedores')->on('id_fornecedor');
+            $table->foreign('id_fornecedor')->references('id_fornecedor')->on('fornecedor');
         });
 
         Schema::create('movimentacoes', function (Blueprint $table) {
@@ -59,15 +59,15 @@ class TabelasIniciais extends Migration
             $table->enum('tp_movimentacao', [ 1, 2 ])->comment('1 = entrada, 2 = saída');
             $table->timestamp('dthr_movimentacao')->nullable();
             $table->string('ds_movimentacao', 50);
-            $table->integer('id_usuario', false, true);
+            $table->unsignedInteger('id_usuario', false);
             $table->timestamp('dt_cadastro')->nullable();
-            $table->foreign('id_usuario')->references('usuarios')->on('id_usuario');
+            $table->foreign('id_usuario')->references('id_usuario')->on('users');
         });
 
         Schema::create('produtos_movimentacoes', function (Blueprint $table) {
-            $table->integer('id_produto', false, true);
-            $table->integer('id_movimentacao', false, true);
-            $table->integer('nr_qtd_movimentada');
+            $table->unsignedInteger('id_produto', false);
+            $table->unsignedInteger('id_movimentacao', false);
+            $table->unsignedInteger('nr_qtd_movimentada', false);
             $table->decimal('vlr_unitario');
             $table->primary([ 'id_produto', 'id_movimentacao' ]);
         });
