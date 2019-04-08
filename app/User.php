@@ -9,6 +9,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const CREATED_AT = 'dt_cadastro';
+    const UPDATED_AT = 'dt_edicao';
+
     protected $primaryKey = 'id_usuario';
 
     /**
@@ -17,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nm_usuario', 'login', 'senha', 'email',
+        'nm_usuario', 'login', 'password', 'email',
     ];
 
     /**
@@ -26,7 +29,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'senha', 'remember_token',
+        'password', 'remember_token',
     ];
 
     public function movimentacoes() {

@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Telefone extends Model
+class Telefone extends CustomModel
 {
     protected $primaryKey = 'id_telefone';
     protected $table = 'telefones';

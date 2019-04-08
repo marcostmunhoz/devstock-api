@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Movimentacao extends Model
+class Movimentacao extends CustomModel
 {
     protected $primaryKey = 'id_movimentacao';
     protected $table = 'movimentacoes';

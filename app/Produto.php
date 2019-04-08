@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Produto extends Model
+class Produto extends CustomModel
 {
     protected $primaryKey = 'id_produto';
     protected $table = 'produtos';
