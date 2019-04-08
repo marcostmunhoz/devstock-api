@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->increments('id_usuario');
             $table->string('nm_usuario', 50);
             $table->string('login', 20)->unique();
-            $table->string('senha', 60);
+            $table->string('password', 60);
             $table->string('email', 191)->unique();
             $table->boolean('flg_status')->default(1);
             $table->rememberToken();
