@@ -55,9 +55,11 @@ class LoginController extends Controller
         $user = null;
         $credentials = $request->only([ 'login', 'password' ]);
         $remember = $request->filled('remember');
+        $validator = $this->validator($credentials);
 
         try {
-            $attempt = $this->attemptLogin($credentials, $remember);
+            $validator->validate();
+            $attempt = $this->guard()->attempt($credentials, $remember);
             if (!$attempt) {
                 throw new \Exception('Usuário e/ou senha inválidos.');
             }
@@ -94,34 +96,5 @@ class LoginController extends Controller
             'status'  => 'ok',
             'message' => 'Logout realizado com sucesso.'
         ]);
-    }
-
-    public function attemptLogin($credentials, $remember = false) {
-        $validator = $this->validator($credentials);
-
-        try {
-            $validator->validate();
-
-            $login = $credentials['login'];
-            $senha = $credentials['password'];
-
-            $user = User::where('login', $login)
-                        ->where('flg_status', 1)
-                        ->first();
-            if (!$user && strpos($login, '@') !== false) {
-                $user = User::where('email', $login)
-                            ->where('flg_status', 1)
-                            ->first();
-            }
-
-            if ($user && Auth::check($user->password, $senha)) {
-                $this->guard()->login($user, $remember);
-                return true;
-            }
-
-            return false;
-        } catch (\Exception $ex) {
-            return false;
-        }
     }
 }
