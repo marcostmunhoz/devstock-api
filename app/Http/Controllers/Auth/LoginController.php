@@ -101,8 +101,8 @@ class LoginController extends Controller
         try {
             $validator->validate();
 
-            $login = $credentials->input('login');
-            $senha = $credentials->input('senha');
+            $login = $credentials['login'];
+            $senha = $credentials['password'];
 
             $user = User::where('login', $login)
                         ->where('flg_status', 1)
