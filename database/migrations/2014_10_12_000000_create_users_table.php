@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->string('email', 191)->unique();
             $table->boolean('flg_status')->default(1);
+            $table->boolean('flg_admin')->default(0);
             $table->rememberToken();
             $table->timestamp('dt_cadastro')->nullable();
             $table->timestamp('dt_edicao')->nullable();

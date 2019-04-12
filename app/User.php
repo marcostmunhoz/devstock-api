@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nm_usuario', 'login', 'password', 'email',
+        'nm_usuario', 'login', 'password', 'email', 'flg_status', 'flg_admin'
     ];
 
     /**
@@ -34,5 +34,9 @@ class User extends Authenticatable
 
     public function movimentacoes() {
         return $this->hasMany(Movimentacao::class, 'id_usuario', 'id_usuario');
+    }
+
+    public function isAdmin() {
+        return $this->flg_admin == 1;
     }
 }
