@@ -13,7 +13,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $rules = [];
-    protected $relation = [];
+    protected $relations = [];
     protected $useStatusFlag = false;
     protected $model;
     protected $friendlyName;

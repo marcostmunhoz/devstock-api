@@ -17,7 +17,7 @@ class ProdutoController extends Controller
         ];
     }
 
-    public function show($id) {
-        return parent::show($id, true);
+    public function show($id, $includeRelations = true) {
+        return parent::show($id, $includeRelations);
     }
 }

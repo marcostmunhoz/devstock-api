@@ -26,14 +26,23 @@ Route::group([ 'middleware' => [ 'auth' ] ], function() {
     // Rota para logout do usuário logado
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
-    Route::get('/usuarios', 'UsuarioController@showAll')->name('exibir-todos-usuarios');
-    Route::get('/usuarios/{id}', 'UsuarioController@show')->name('exibir-usuario');
-    Route::put('/usuarios/{id}', 'UsuarioController@update')->name('editar-usuario');
-    Route::delete('/usuarios/{id}', 'UsuarioController@delete')->name('excluir-usuario');
+    // Rotas para a tela de usuários
+    Route::get('/usuarios', 'UsuarioController@showAll');
+    Route::get('/usuarios/{id}', 'UsuarioController@show');
+    Route::put('/usuarios/{id}', 'UsuarioController@update');
+    Route::delete('/usuarios/{id}', 'UsuarioController@delete');
 
-    Route::get('/produtos', 'ProdutoController@showAll')->name('exibir-todos-produtos');
-    Route::get('/produtos/{id}', 'ProdutoController@show')->name('exibir-produto');
-    Route::post('/produtos', 'ProdutoController@create')->name('cadastrar-produto');
-    Route::put('/produtos/{id}', 'ProdutoController@update')->name('editar-produto');
-    Route::delete('/produtos/{id}', 'ProdutoController@delete')->name('excluir-produto');
+    // Rotas para a tela de produtos
+    Route::get('/produtos', 'ProdutoController@showAll');
+    Route::get('/produtos/{id}', 'ProdutoController@show');
+    Route::post('/produtos', 'ProdutoController@create');
+    Route::put('/produtos/{id}', 'ProdutoController@update');
+    Route::delete('/produtos/{id}', 'ProdutoController@delete');
+
+    // Rotas para a tela de fornecedores
+    Route::get('/fornecedores', 'FornecedorController@showAll');
+    Route::get('/fornecedores/{id}', 'FornecedorController@show');
+    Route::post('/fornecedores', 'FornecedorController@create');
+    Route::put('/fornecedores/{id}', 'FornecedorController@update');
+    Route::delete('/fornecedores/{id}', 'FornecedorController@delete');
 });
