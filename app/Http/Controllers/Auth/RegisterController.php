@@ -44,17 +44,6 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create($data);
-    }
-
     public function register(\Illuminate\Http\Request $request) {
         $user = null;
         $data = $request->all();
@@ -63,7 +52,7 @@ class RegisterController extends Controller
         try {
             $validator->validate();
             $data['password'] = bcrypt($data['password']);
-            $user = $this->create($data);
+            $user = User::create($data);
         } catch (\Illuminate\Validation\ValidationException $ex) {
             return response()->json([
                 'status'  => 'error',
