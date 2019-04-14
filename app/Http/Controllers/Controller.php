@@ -13,6 +13,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $rules = [];
+    protected $relation = [];
     protected $useStatusFlag = false;
     protected $model;
     protected $friendlyName;
@@ -21,13 +22,21 @@ class Controller extends BaseController
         validator($data, $this->rules)->validate();
     }
 
-    public function showAll() {
+    public function showAll($includeRelations = false) {
         $result = null;
 
         if ($this->useStatusFlag) {
-            $result = $this->model::where('flg_status', '!=', 2)->get();
+            if ($includeRelations && count($this->relations)) {
+                $result = $this->model::with($this->relations)->where('flg_status', '!=', 2)->get();
+            } else {
+                $result = $this->model::where('flg_status', '!=', 2)->get();
+            }
         } else {
-            $result = $this->model::all();
+            if ($includeRelations && count($this->relations)) {
+                $result = $this->model::with($this->relations)->all();
+            } else {
+                $result = $this->model::all();
+            }
         }
 
         return response()->json([
@@ -36,11 +45,15 @@ class Controller extends BaseController
         ]);
     }
 
-    public function show($id) {
+    public function show($id, $includeRelations = false) {
         $result = null;
 
         try {
-            $result = $this->model::find($id);
+            if ($includeRelations && count($this->relations)) {
+                $result = $this->model::with($this->relations)->find($id);
+            } else {
+                $result = $this->model::find($id);
+            }
 
             if (!$result || ($this->useStatusFlag && $result->flg_status == 2)) {
                 return response()->json([

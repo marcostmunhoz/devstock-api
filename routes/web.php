@@ -30,4 +30,10 @@ Route::group([ 'middleware' => [ 'auth' ] ], function() {
     Route::get('/usuarios/{id}', 'UsuarioController@show')->name('exibir-usuario');
     Route::put('/usuarios/{id}', 'UsuarioController@update')->name('editar-usuario');
     Route::delete('/usuarios/{id}', 'UsuarioController@delete')->name('excluir-usuario');
+
+    Route::get('/produtos', 'ProdutoController@showAll')->name('exibir-todos-produtos');
+    Route::get('/produtos/{id}', 'ProdutoController@show')->name('exibir-produto');
+    Route::post('/produtos', 'ProdutoController@create')->name('cadastrar-produto');
+    Route::put('/produtos/{id}', 'ProdutoController@update')->name('editar-produto');
+    Route::delete('/produtos/{id}', 'ProdutoController@delete')->name('excluir-produto');
 });
