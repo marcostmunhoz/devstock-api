@@ -8,7 +8,7 @@ use App\User;
 class UsuarioController extends Controller
 {
     public function showAll() {
-        $users = User::all();
+        $users = User::where('flg_status', '!=', 2)->get();
 
         return response()->json([
             'status' => 'ok',
@@ -22,7 +22,7 @@ class UsuarioController extends Controller
         try {
             $user = User::find($id);
 
-            if (!$user) {
+            if (!$user || $user->flg_status == 2) {
                 return response()->json([
                     'status'  => 'error',
                     'message' => 'Usuário não encontrado.'
@@ -47,7 +47,7 @@ class UsuarioController extends Controller
         try {
             $user = User::find($id);
             
-            if (!$user) {
+            if (!$user || $user->flg_status == 2) {
                 return response()->json([
                     'status'  => 'error',
                     'message' => 'Usuário não encontrado.'
@@ -76,7 +76,7 @@ class UsuarioController extends Controller
         try {
             $user = User::find($id);
             
-            if (!$user) {
+            if (!$user || $user->flg_status == 2) {
                 return response()->json([
                     'status'  => 'error',
                     'message' => 'Usuário não encontrado.'
