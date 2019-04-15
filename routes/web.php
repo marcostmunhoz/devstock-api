@@ -45,4 +45,10 @@ Route::group([ 'middleware' => [ 'auth' ] ], function() {
     Route::post('/fornecedores', 'FornecedorController@create');
     Route::put('/fornecedores/{id}', 'FornecedorController@update');
     Route::delete('/fornecedores/{id}', 'FornecedorController@delete');
+
+    //Rotas para a tela de estoque
+    Route::group([ 'prefix' => '/estoque' ], function() {
+        Route::get('/{id}', 'EstoqueController@listarMovimentacoes');
+        Route::post('/realizar-movimentacao', 'EstoqueController@realizarMovimentacao');
+    });
 });
