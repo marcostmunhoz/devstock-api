@@ -4,69 +4,37 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Dotenv\Exception\ValidationException;
+use Illuminate\Auth\Events\Login as LoginEvent;
 
-class LoginController extends Controller
-{
-    protected $redirectTo = '/';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
-
-    /**
-     * Show the application's login form.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showLoginForm()
-    {
-        return view('auth.login');
-    }
-
-    protected function guard() {
-        return Auth::guard();
-    }
-
+class LoginController extends Controller {
     protected function validator(array $data) {
-        return Validator::make($data, [
+        return validator($data, [
             'login'    => 'required|string',
             'password' => 'required|string'
         ]);
     }
 
-    /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function username()
-    {
-        return 'login';
-    }
-
-    public function login(Request $request) {
+    public function login(Request $req) {
         $user = null;
-        $credentials = $request->only([ 'login', 'password' ]);
-        $remember = $request->filled('remember');
-        $validator = $this->validator($credentials);
+        $token = null;
+        $credentials = $req->only([ 'login', 'password' ]);
 
         try {
-            $validator->validate();
-            $attempt = $this->guard()->attempt($credentials, $remember);
-            if (!$attempt) {
-                throw new \Exception('Usuário e/ou senha inválidos.');
+            $this->validator($credentials);
+            $token = JWTAuth::attempt($credentials);
+            if (!$token) {
+                throw new Exception('Usuário e/ou senha inválidos.');
             }
-            $request->session()->regenerate();
-            $user = $this->guard()->user();
-        } catch (\Illuminate\Validation\ValidationException $ex) {
+            $user = auth()->user();
+        } catch (JWTException $ex) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $ex->getMessage()
+            ], 500);
+        } catch (ValidationException $ex) {
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Ocorreu um erro na validação.',
@@ -76,26 +44,18 @@ class LoginController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'message' => $ex->getMessage()
-            ], 400);
+            ], 401);
         }
 
-        event(new \Illuminate\Auth\Events\Login($user, $remember));
+        event(new LoginEvent($user, false));
 
         return response()->json([
             'status'  => 'ok',
             'message' => 'Login realizado com sucesso.',
-            'data'    => $user
-        ]);
-    }
-
-    public function logout(Request $request) {
-        $this->guard()->logout();
-        
-        $request->session()->invalidate();
-
-        return response()->json([
-            'status'  => 'ok',
-            'message' => 'Logout realizado com sucesso.'
+            'data'    => [
+                'token' => $token,
+                'user'  => $user
+            ]
         ]);
     }
 }
