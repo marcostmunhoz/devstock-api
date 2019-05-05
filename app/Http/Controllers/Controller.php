@@ -19,6 +19,7 @@ class Controller extends BaseController
     protected $useStatusFlag = false;
     protected $model;
     protected $friendlyName;
+    protected $afterInsert = null;
 
     public function showAll($includeRelations = false) {
         $result = null;
@@ -116,9 +117,15 @@ class Controller extends BaseController
         try {
             $fields = $this->validateWith($this->insertRules, $request);
 
+            \DB::beginTransaction();
             $result = new $this->model;
             $result->fill($fields);
             $result->save();
+
+            if ($this->afterInsert && is_callable(($this->afterInsert))) {
+                call_user_func($this->afterInsert, $request, $result);
+            }
+            \DB::commit();
         } catch (\Illuminate\Validation\ValidationException $ex) {
             return response()->json([
                 'status'  => 'error',
@@ -126,10 +133,11 @@ class Controller extends BaseController
                 'data'    => $ex->validator->getMessageBag()->toArray()
             ], 400);
         } catch (\Exception $ex) {
+            \DB::rollback();
             return response()->json([
                 'status'  => 'error',
                 'message' => $ex->getMessage()
-            ]);
+            ], 400);
         }
 
         return response()->json([

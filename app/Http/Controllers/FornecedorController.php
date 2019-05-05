@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Fornecedor;
+use App\Telefone;
+use App\Email;
+
 class FornecedorController extends Controller
 {
     public function __construct() {
@@ -26,11 +31,91 @@ class FornecedorController extends Controller
             'cnpj_fornecedor'
         ];
         $this->relations = [
-            'telefones'
+            'telefones',
+            'emails'
         ];
+        $this->afterInsert = function (Request $request, Fornecedor $fornecedor) {
+            if ($request->has('ddd_telefone')) {
+                $fields = $this->validateWith([
+                    'ddd_telefone' => 'required|string|size:2',
+                    'nr_telefone'  => 'required|string|digits_between:8,9',
+                    'tp_telefone'  => 'required|integer|in:1,2,3'
+                ], $request);
+
+                $fields['id_fornecedor'] = $fornecedor->id_fornecedor;
+
+                $telefone = new Telefone;
+                $telefone->fill($fields);
+                $telefone->save();
+            }
+
+            if ($request->has('email')) {
+                $fields = $this->validateWith([
+                    'email'     => 'required|string|max:100',
+                    'tp_email'  => 'required|integer|in:1,2,3'
+                ], $request);
+
+                $fields['id_fornecedor'] = $fornecedor->id_fornecedor;
+
+                $email = new Email;
+                $email->fill($fields);
+                $email->save();
+            }
+        };
     }
 
     public function show($id, $includeRelations = true) {
         return parent::show($id, $includeRelations);
+    }
+
+    public function deleteTelefone($id) {
+        try {
+            $telefone = Telefone::find($id);
+            
+            if (!$telefone) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => "Telefone não encontrado."
+                ], 404);
+            }
+
+            $telefone->delete();
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $ex->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'status'  => 'ok',
+            'message' => 'Telefone excluído com sucesso.'
+        ]);
+    }
+
+
+    public function deleteEmail($id) {
+        try {
+            $email = Email::find($id);
+            
+            if (!$email) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'E-mail não encontrado.'
+                ], 404);
+            }
+
+            $email->delete();
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $ex->getMessage()
+            ], 400);
+        }
+
+        return response()->json([
+            'status'  => 'ok',
+            'message' => 'E-mail excluído com sucesso.'
+        ]);
     }
 }

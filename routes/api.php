@@ -23,26 +23,28 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::group([ 'middleware' => [ 'jwt.auth' ] ], function() {
     // Rotas para a tela de usuários
     Route::get('/usuarios', 'UsuarioController@showAll');
-    Route::get('/usuario/{id}', 'UsuarioController@show');
     Route::get('/usuarios/{q}', 'UsuarioController@searchLike');
-    Route::put('/usuarios/{id}', 'UsuarioController@update');
-    Route::delete('/usuarios/{id}', 'UsuarioController@delete');
+    Route::get('/usuario/{id}', 'UsuarioController@show');
+    Route::put('/usuario/{id}', 'UsuarioController@update');
+    Route::delete('/usuario/{id}', 'UsuarioController@delete');
 
     // Rotas para a tela de produtos
     Route::get('/produtos', 'ProdutoController@showAll');
-    Route::get('/produto/{id}', 'ProdutoController@show');
     Route::get('/produtos/{q}', 'ProdutoController@searchLike');
-    Route::post('/produtos', 'ProdutoController@create');
-    Route::put('/produtos/{id}', 'ProdutoController@update');
-    Route::delete('/produtos/{id}', 'ProdutoController@delete');
+    Route::get('/produto/{id}', 'ProdutoController@show');
+    Route::post('/produto', 'ProdutoController@create');
+    Route::put('/produto/{id}', 'ProdutoController@update');
+    Route::delete('/produto/{id}', 'ProdutoController@delete');
 
     // Rotas para a tela de fornecedores
     Route::get('/fornecedores', 'FornecedorController@showAll');
-    Route::get('/fornecedor/{id}', 'FornecedorController@show');
     Route::get('/fornecedores/{q}', 'FornecedorController@searchLike');
-    Route::post('/fornecedores', 'FornecedorController@create');
-    Route::put('/fornecedores/{id}', 'FornecedorController@update');
-    Route::delete('/fornecedores/{id}', 'FornecedorController@delete');
+    Route::get('/fornecedor/{id}', 'FornecedorController@show');
+    Route::post('/fornecedor', 'FornecedorController@create');
+    Route::put('/fornecedor/{id}', 'FornecedorController@update');
+    Route::delete('/fornecedor/{id}', 'FornecedorController@delete');
+    Route::delete('/fornecedor/telefone/{id}', 'FornecedorController@deleteTelefone');
+    Route::delete('/fornecedor/email/{id}', 'FornecedorController@deleteEmail');
 
     //Rotas para a tela de estoque
     Route::group([ 'prefix' => '/estoque' ], function() {

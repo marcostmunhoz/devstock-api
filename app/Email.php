@@ -2,15 +2,16 @@
 
 namespace App;
 
-class Telefone extends CustomModel
+use Illuminate\Database\Eloquent\Model;
+
+class Email extends Model
 {
     public $timestamps = false;
-    protected $primaryKey = 'id_telefone';
-    protected $table = 'telefones';
+    protected $primaryKey = 'id_email';
+    protected $table = 'emails';
     protected $fillable = [
-        'ddd_telefone',
-        'nr_telefone',
-        'tp_telefone',
+        'email',
+        'tp_email',
         'id_fornecedor'
     ];
 

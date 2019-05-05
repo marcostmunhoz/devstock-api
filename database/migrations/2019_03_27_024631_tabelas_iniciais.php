@@ -32,6 +32,13 @@ class TabelasIniciais extends Migration
             $table->unsignedInteger('id_fornecedor', false);
         });
 
+        Schema::create('emails', function (Blueprint $table) {
+            $table->increments('id_email');
+            $table->string('email', 100);
+            $table->enum('tp_email', [ 1, 2, 3 ])->comment('1 = Comercial, 2 = Contato, 3 = Outro');
+            $table->unsignedInteger('id_fornecedor', false);
+        });
+
         Schema::create('produtos', function (Blueprint $table) {
             $table->increments('id_produto');
             $table->string('cod_produto', 15)->unique();
@@ -78,6 +85,7 @@ class TabelasIniciais extends Migration
         Schema::dropIfExists('movimentacoes');
         Schema::dropIfExists('produtos_fornecedor');
         Schema::dropIfExists('produtos');
+        Schema::dropIfExists('emails');
         Schema::dropIfExists('telefones');
         Schema::dropIfExists('fornecedores');
     }
