@@ -12,7 +12,7 @@ class Movimentacao extends CustomModel
         'tp_movimentacao', 'dthr_movimentacao', 'ds_movimentacao', 'id_usuario'
     ];
 
-    public function produtos() {
+    public function produtosMovimentacao() {
         return $this->hasMany(ProdutoMovimentacao::class, 'id_movimentacao', 'id_movimentacao')->with('produto');
     }
 

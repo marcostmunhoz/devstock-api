@@ -32,7 +32,8 @@ class EstoqueController extends Controller
         $movimentacoes = Movimentacao::select('movimentacoes.*')
                                     ->join('produtos_movimentacoes', 'movimentacoes.id_movimentacao', '=', 'produtos_movimentacoes.id_movimentacao')
                                     ->where('id_produto', '=', $idProduto)
-                                    ->with('produtos')
+                                    ->orderBy('dthr_movimentacao', 'ASC')
+                                    ->with('produtosMovimentacao')
                                     ->get();
 
         return response()->json([
@@ -61,10 +62,12 @@ class EstoqueController extends Controller
                 ]);
             }
 
+            \DB::beginTransaction();
             $movimentacao = Movimentacao::create([
-                'tp_movimentacao' => $data['tp_movimentacao'],
-                'ds_movimentacao' => $data['ds_movimentacao'],
-                'id_usuario'      => auth()->id()
+                'tp_movimentacao'   => $data['tp_movimentacao'],
+                'ds_movimentacao'   => $data['ds_movimentacao'],
+                'id_usuario'        => auth()->id(),
+                'dthr_movimentacao' => array_key_exists('dthr_movimentacao', $data) ? $data['dthr_movimentacao'] : date('Y-m-d H:i:s')
             ]);
 
             ProdutoMovimentacao::create([
@@ -74,8 +77,14 @@ class EstoqueController extends Controller
                 'vlr_unitario'       => $data['vlr_unitario']
             ]);
 
-            $produto->nr_qtd_estocada -= $data['nr_qtd_movimentada'];
+            if ($data['tp_movimentacao'] == 1) {
+                $produto->nr_qtd_estocada += $data['nr_qtd_movimentada'];
+            } else {
+                $produto->nr_qtd_estocada -= $data['nr_qtd_movimentada'];
+            }
+
             $produto->save();
+            \DB::commit();
         } catch (\Illuminate\Validation\ValidationException $ex) {
             return response()->json([
                 'status'  => 'error',
@@ -83,6 +92,7 @@ class EstoqueController extends Controller
                 'data'    => $ex->validator->getMessageBag()->toArray()
             ], 400);
         } catch (\Exception $ex) {
+            \DB::rollback();
             return response()->json([
                 'status'  => 'error',
                 'message' => $ex->getMessage()
