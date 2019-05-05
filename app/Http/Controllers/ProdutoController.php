@@ -8,9 +8,13 @@ class ProdutoController extends Controller
         $this->useStatusFlag = true;
         $this->model = \App\Produto::class;
         $this->friendlyName = 'Produto';
-        $this->rules = [
+        $this->insertRules = [
             'cod_produto' => 'required|string|max:15|unique:produtos',
             'nm_produto'  => 'required|string|max:50'
+        ];
+        $this->updateRules = [
+            'cod_produto' => 'string|max:15',
+            'nm_produto'  => 'string|max:50'
         ];
         $this->relations = [
             'fornecedores'

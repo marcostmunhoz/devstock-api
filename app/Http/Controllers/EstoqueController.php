@@ -10,7 +10,7 @@ use App\ProdutoMovimentacao;
 class EstoqueController extends Controller
 {
     public function __construct() {
-        $this->rules = [
+        $this->insertRules = [
             'tp_movimentacao'    => 'required|integer|in:1,2',
             'ds_movimentacao'    => 'required|string|max:50',
             'id_produto'         => 'required|integer|exists:produtos,id_produto',
@@ -37,8 +37,7 @@ class EstoqueController extends Controller
 
     public function realizarMovimentacao(Request $request) {
         try {
-            $data = $request->all();
-            $this->validateFields($data);
+            $data = $this->validateWith($this->insertRules, $request);
 
             $produto = Produto::find($data['id_produto']);
             if (!$produto || $produto->flg_status == 2) {

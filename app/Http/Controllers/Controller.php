@@ -12,15 +12,12 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected $rules = [];
+    protected $insertRules = [];
+    protected $updateRules = [];
     protected $relations = [];
     protected $useStatusFlag = false;
     protected $model;
     protected $friendlyName;
-
-    protected function validateFields($data) {
-        validator($data, $this->rules)->validate();
-    }
 
     public function showAll($includeRelations = false) {
         $result = null;
@@ -78,10 +75,10 @@ class Controller extends BaseController
         $result = null;
 
         try {
-            $this->validateFields($request->all());
+            $fields = $this->validateWith($this->insertRules, $request);
 
             $result = new $this->model;
-            $result->fill($request->all());
+            $result->fill($fields);
             $result->save();
         } catch (\Illuminate\Validation\ValidationException $ex) {
             return response()->json([
@@ -107,7 +104,7 @@ class Controller extends BaseController
         $result = null;
 
         try {
-            $this->validateFields($request->all());
+            $fields = $this->validateWith($this->updateRules, $request);
 
             $result = $this->model::find($id);
             
@@ -118,7 +115,7 @@ class Controller extends BaseController
                 ], 404);
             }
 
-            $result->fill($request->all());
+            $result->fill($fields);
             $result->save();
         } catch (\Illuminate\Validation\ValidationException $ex) {
             return response()->json([
