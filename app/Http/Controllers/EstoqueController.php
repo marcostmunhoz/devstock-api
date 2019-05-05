@@ -29,9 +29,15 @@ class EstoqueController extends Controller
             ], 404);
         }
 
+        $movimentacoes = Movimentacao::select('movimentacoes.*')
+                                    ->join('produtos_movimentacoes', 'movimentacoes.id_movimentacao', '=', 'produtos_movimentacoes.id_movimentacao')
+                                    ->where('id_produto', '=', $idProduto)
+                                    ->with('produtos')
+                                    ->get();
+
         return response()->json([
             'status' => 'ok',
-            'data'   => $produto->movimentacoes()
+            'data'   => $movimentacoes
         ]);
     }
 
