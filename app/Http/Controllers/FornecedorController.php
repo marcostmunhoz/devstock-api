@@ -20,6 +20,11 @@ class FornecedorController extends Controller
             'cnpj_fornecedor' => 'string|max:14',
             'end_fornecedor'  => 'string|max:150'
         ];
+        $this->searchColumns = [
+            'razao_social',
+            'nome_fantasia',
+            'cnpj_fornecedor'
+        ];
         $this->relations = [
             'telefones'
         ];

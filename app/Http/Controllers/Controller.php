@@ -14,6 +14,7 @@ class Controller extends BaseController
 
     protected $insertRules = [];
     protected $updateRules = [];
+    protected $searchColumns = [];
     protected $relations = [];
     protected $useStatusFlag = false;
     protected $model;
@@ -68,6 +69,44 @@ class Controller extends BaseController
         return response()->json([ 
             'status' => 'ok',
             'data'   => $result 
+        ]);
+    }
+
+    public function searchLike($q, $includeRelations = false) {
+        $columns = $this->searchColumns;
+        $result = null;
+
+        if (!$q) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Nenhumo dado fornecido para a busca.'
+            ], 400);
+        } elseif (!count($columns)) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Não foram especificadas as colunas para a busca.'
+            ], 500);
+        }
+
+        $result = $this->model::where(function($query) use ($q, $columns) {
+            foreach ($columns as $column) {
+                $query->orWhere($column, 'LIKE', "%$q%");
+            }
+        });
+
+        if ($this->useStatusFlag) {
+            $result->where('flg_status', '=', 1);
+        }
+
+        if ($includeRelations && count($this->relations)) {
+            $result = $result->with($this->relations);
+        }
+
+        $result = $result->get();
+
+        return response()->json([
+            'status' => 'ok',
+            'data'   => $result
         ]);
     }
 

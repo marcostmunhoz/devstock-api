@@ -23,6 +23,11 @@ class UsuarioController extends Controller
             'password'   => 'string|min:6',
             'email'      => 'string|email|max:191'
         ];
+        $this->searchColumns = [
+            'nm_usuario',
+            'login',
+            'email'
+        ];
     }
 
     public function update(Request $request, $id) {

@@ -16,6 +16,10 @@ class ProdutoController extends Controller
             'cod_produto' => 'string|max:15',
             'nm_produto'  => 'string|max:50'
         ];
+        $this->searchColumns = [
+            'cod_produto',
+            'nm_produto'
+        ];
         $this->relations = [
             'fornecedores'
         ];
