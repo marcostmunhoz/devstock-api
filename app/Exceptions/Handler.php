@@ -47,16 +47,16 @@ class Handler extends ExceptionHandler
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception) {
-        if (is_a($exception, \Tymon\JWTAuth\Exceptions\TokenExpiredException::class)) {
+        if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Token de autenticação expirado.'
-            ], $exception->getStatusCode());
-        } else if (is_a($exception, \Tymon\JWTAuth\Exceptions\TokenInvalidException::class)) {
+            ], 401);
+        } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Token de autenticação inválido.'
-            ], $exception->getStatusCode());
+            ], 401);
         } else {
             return response()->json([
                 'status' => 'error',

@@ -58,4 +58,23 @@ class LoginController extends Controller {
             ]
         ]);
     }
+
+    public function checkToken(Request $req) {
+        $user = JWTAuth::parseToken()->toUser();
+
+        if (!$user) {
+            return respose()->json([
+                'status'  => 'error',
+                'message' => 'Usuário não encontrado.'
+            ], 404);
+        }
+
+        return response()->json([
+            'status'  => 'ok',
+            'message' => 'Token válido',
+            'data' => [
+                'user' => $user
+            ]
+        ]);
+    }
 }
