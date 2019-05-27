@@ -59,7 +59,7 @@ class LoginController extends Controller {
         ]);
     }
 
-    public function checkToken(Request $req) {
+    public function checkToken($token) {
         $user = JWTAuth::parseToken()->toUser();
 
         if (!$user) {

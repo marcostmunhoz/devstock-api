@@ -18,7 +18,7 @@ Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('r
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login-form');
 Route::post('/login', 'Auth\LoginController@login')->name('login');
-Route::post('/check-token', 'Auth\LoginController@checkToken')->name('check-token');
+Route::get('/check-token/{token}', 'Auth\LoginController@checkToken')->name('check-token');
 
 // Grupo de rotas que exigem login do usuário
 Route::group([ 'middleware' => [ 'jwt.auth' ] ], function() {
