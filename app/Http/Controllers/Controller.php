@@ -140,6 +140,8 @@ class Controller extends BaseController
             ], 400);
         }
 
+        $result->refresh();
+
         return response()->json([
             'status'  => 'ok',
             'message' => "$this->friendlyName cadastrado(a) com sucesso.",
@@ -176,6 +178,8 @@ class Controller extends BaseController
                 'message' => $ex->getMessage()
             ], 400);
         }
+
+        $result->refresh();
 
         return response()->json([
             'status'  => 'ok',
