@@ -9,12 +9,14 @@ class ProdutoController extends Controller
         $this->model = \App\Produto::class;
         $this->friendlyName = 'Produto';
         $this->insertRules = [
-            'cod_produto' => 'required|string|max:15|unique:produtos',
-            'nm_produto'  => 'required|string|max:50'
+            'cod_produto'     => 'required|string|max:15|unique:produtos',
+            'nm_produto'      => 'required|string|max:50',
+            'nr_qtd_estocada' => 'integer'
         ];
         $this->updateRules = [
-            'cod_produto' => 'string|max:15',
-            'nm_produto'  => 'string|max:50'
+            'cod_produto'     => 'string|max:15',
+            'nm_produto'      => 'string|max:50',
+            'nr_qtd_estocada' => 'integer'
         ];
         $this->searchColumns = [
             'cod_produto',
