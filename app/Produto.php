@@ -8,7 +8,7 @@ class Produto extends CustomModel
     protected $table = 'produtos';
 
     protected $fillable = [
-        'cod_produto', 'nm_produto', 'nr_qtd_estocada'
+        'cod_produto', 'nm_produto', 'flg_status', 'nr_qtd_estocada'
     ];
 
     public function fornecedores() {
