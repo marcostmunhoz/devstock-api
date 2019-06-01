@@ -10,18 +10,13 @@ class Fornecedor extends CustomModel
         'razao_social',
         'nome_fantasia',
         'cnpj_fornecedor',
-        'end_fornecedor'
+        'end_fornecedor',
+        'fone_fornecedor',
+        'email_fornecedor',
+        'flg_status'
     ];
 
-    public function telefones() {
-        return $this->hasMany(Telefone::class, 'id_fornecedor', 'id_fornecedor');
-    }
-
-    public function emails() {
-        return $this->hasMany(Email::class, 'id_fornecedor', 'id_fornecedor');
-    }
-
     public function produtos() {
-        return $this->hasMany(ProdutoFornecedor::class, 'id_fornecedor', 'id_fornecedor')->with('produto');
+        return $this->hasOne(ProdutoFornecedor::class, 'id_fornecedor', 'id_fornecedor')->with('produto');
     }
 }

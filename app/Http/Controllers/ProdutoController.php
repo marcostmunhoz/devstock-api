@@ -11,11 +11,13 @@ class ProdutoController extends Controller
         $this->insertRules = [
             'cod_produto'     => 'required|string|max:15|unique:produtos',
             'nm_produto'      => 'required|string|max:50',
+            'id_fornecedor'   => 'required|integer|exists:fornecedores,id_fornecedor',
             'nr_qtd_estocada' => 'integer'
         ];
         $this->updateRules = [
             'cod_produto'     => 'string|max:15',
             'nm_produto'      => 'string|max:50',
+            'id_fornecedor'   => 'integer|exists:fornecedores,id_fornecedor',
             'nr_qtd_estocada' => 'integer'
         ];
         $this->searchColumns = [

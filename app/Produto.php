@@ -8,11 +8,15 @@ class Produto extends CustomModel
     protected $table = 'produtos';
 
     protected $fillable = [
-        'cod_produto', 'nm_produto', 'flg_status', 'nr_qtd_estocada'
+        'cod_produto', 
+        'nm_produto', 
+        'nr_qtd_estocada',
+        'id_fornecedor',
+        'flg_status', 
     ];
 
-    public function fornecedores() {
-        return $this->hasMany(ProdutoFornecedor::class, 'id_produto', 'id_produto')->with('fornecedor');
+    public function fornecedor() {
+        return $this->hasOne(ProdutoFornecedor::class, 'id_produto', 'id_produto')->with('fornecedor');
     }
 
     public function movimentacoes() {
