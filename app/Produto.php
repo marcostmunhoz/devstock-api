@@ -16,6 +16,6 @@ class Produto extends CustomModel
     ];
 
     public function fornecedor() {
-        return $this->hasOne(ProdutoFornecedor::class, 'id_produto', 'id_produto')->with('fornecedor');
+        return $this->hasOne(Fornecedor::class, 'id_fornecedor', 'id_fornecedor');
     }
 }
