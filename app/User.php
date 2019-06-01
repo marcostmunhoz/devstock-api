@@ -21,7 +21,15 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'nm_usuario', 'login', 'password', 'email', 'flg_status', 'flg_admin'
+        'nm_usuario', 
+        'login', 
+        'password', 
+        'email', 
+        'flg_status',
+        'flg_edit_usu',
+        'flg_edit_forn',
+        'flg_edit_prod',
+        'flg_mov'
     ];
 
     /**
@@ -35,10 +43,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function movimentacoes() {
         return $this->hasMany(Movimentacao::class, 'id_usuario', 'id_usuario');
-    }
-
-    public function isAdmin() {
-        return $this->flg_admin == 1;
     }
 
     public function getJWTIdentifier() {

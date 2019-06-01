@@ -25,7 +25,7 @@ class ProdutoController extends Controller
             'nm_produto'
         ];
         $this->relations = [
-            'fornecedores'
+            'fornecedor'
         ];
     }
 
