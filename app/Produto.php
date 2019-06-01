@@ -18,8 +18,4 @@ class Produto extends CustomModel
     public function fornecedor() {
         return $this->hasOne(ProdutoFornecedor::class, 'id_produto', 'id_produto')->with('fornecedor');
     }
-
-    public function movimentacoes() {
-        return $this->hasMany(ProdutoMovimentacao::class, 'id_produto', 'id_produto')->with('movimentacao');
-    }
 }

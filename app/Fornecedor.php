@@ -15,8 +15,4 @@ class Fornecedor extends CustomModel
         'email_fornecedor',
         'flg_status'
     ];
-
-    public function produtos() {
-        return $this->hasOne(ProdutoFornecedor::class, 'id_fornecedor', 'id_fornecedor')->with('produto');
-    }
 }
