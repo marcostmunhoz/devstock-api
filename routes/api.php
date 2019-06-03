@@ -28,6 +28,8 @@ Route::group([ 'middleware' => [ 'jwt.auth' ] ], function() {
     Route::get('/usuario/{id}', 'UsuarioController@show');
     Route::put('/usuario/{id}', 'UsuarioController@update');
     Route::delete('/usuario/{id}', 'UsuarioController@delete');
+    Route::get('/usuario/resetar-senha/{id}', 'UsuarioController@resetPassword');
+    Route::put('/usuario/alterar-senha/{id}', 'UsuarioController@changePassword');
 
     // Rotas para a tela de produtos
     Route::get('/produtos', 'ProdutoController@showAll');
@@ -44,8 +46,6 @@ Route::group([ 'middleware' => [ 'jwt.auth' ] ], function() {
     Route::post('/fornecedor', 'FornecedorController@create');
     Route::put('/fornecedor/{id}', 'FornecedorController@update');
     Route::delete('/fornecedor/{id}', 'FornecedorController@delete');
-    Route::delete('/fornecedor/telefone/{id}', 'FornecedorController@deleteTelefone');
-    Route::delete('/fornecedor/email/{id}', 'FornecedorController@deleteEmail');
 
     //Rotas para a tela de estoque
     Route::group([ 'prefix' => '/estoque' ], function() {
