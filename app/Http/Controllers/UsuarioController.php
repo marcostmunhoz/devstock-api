@@ -12,15 +12,23 @@ class UsuarioController extends Controller
         $this->model = \App\User::class;
         $this->friendlyName = 'Usuário';
         $this->insertRules = [
-            'nm_usuario' => 'required|string|max:50',
-            'login'      => 'required|string|max:20|unique:users',
-            'password'   => 'string|min:6',
-            'email'      => 'required|string|email|max:191|unique:users'
+            'nm_usuario'    => 'required|string|max:50',
+            'login'         => 'required|string|max:20|unique:users',
+            'password'      => 'string|min:6',
+            'email'         => 'required|string|email|max:191|unique:users',
+            'flg_edit_usu'  => 'required|int|in:0,1',
+            'flg_edit_forn' => 'required|int|in:0,1',
+            'flg_edit_prod' => 'required|int|in:0,1',
+            'flg_mov'       => 'required|int|in:0,1'
         ];
         $this->updateRules = [
-            'nm_usuario' => 'string|max:50',
-            'login'      => 'string|max:20',
-            'email'      => 'string|email|max:191'
+            'nm_usuario'    => 'string|max:50',
+            'login'         => 'string|max:20',
+            'email'         => 'string|email|max:191',
+            'flg_edit_usu'  => 'required|int|in:0,1',
+            'flg_edit_forn' => 'required|int|in:0,1',
+            'flg_edit_prod' => 'required|int|in:0,1',
+            'flg_mov'       => 'required|int|in:0,1'
         ];
         $this->searchColumns = [
             'nm_usuario',
