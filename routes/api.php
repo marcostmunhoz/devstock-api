@@ -26,6 +26,7 @@ Route::group([ 'middleware' => [ 'jwt.auth' ] ], function() {
     Route::get('/usuarios', 'UsuarioController@showAll');
     Route::get('/usuarios/{q}', 'UsuarioController@searchLike');
     Route::get('/usuario/{id}', 'UsuarioController@show');
+    Route::post('/usuario', 'UsuarioController@create');
     Route::put('/usuario/{id}', 'UsuarioController@update');
     Route::delete('/usuario/{id}', 'UsuarioController@delete');
     Route::get('/usuario/resetar-senha/{id}', 'UsuarioController@resetPassword');
