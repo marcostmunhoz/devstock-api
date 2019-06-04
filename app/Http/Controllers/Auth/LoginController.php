@@ -29,6 +29,10 @@ class LoginController extends Controller {
                 throw new Exception('Usuário e/ou senha inválidos.');
             }
             $user = auth()->user();
+
+            if ($user->flg_status == 2) {
+                throw new Exception('Usuário e/ou senha inválidos.');
+            }
         } catch (JWTException $ex) {
             return response()->json([
                 'status'  => 'error',
