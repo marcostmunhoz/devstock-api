@@ -62,6 +62,46 @@ class UsuarioController extends Controller
         ]);
     }
 
+    public function create(Request $request) {
+        $result = null;
+
+        try {
+            $fields = $this->validateWith($this->insertRules, $request);
+
+            $fields['password'] = bcrypt($fields['password']);
+
+            \DB::beginTransaction();
+            $result = new $this->model;
+            $result->fill($fields);
+            $result->save();
+
+            if ($this->afterInsert && is_callable(($this->afterInsert))) {
+                call_user_func($this->afterInsert, $request, $result);
+            }
+            \DB::commit();
+        } catch (\Illuminate\Validation\ValidationException $ex) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Ocorreu um erro na validação.',
+                'data'    => $ex->validator->getMessageBag()->toArray()
+            ], 400);
+        } catch (\Exception $ex) {
+            \DB::rollback();
+            return response()->json([
+                'status'  => 'error',
+                'message' => $ex->getMessage()
+            ], 400);
+        }
+
+        $result->refresh();
+
+        return response()->json([
+            'status'  => 'ok',
+            'message' => "$this->friendlyName cadastrado(a) com sucesso.",
+            'data'    => $result
+        ]);
+    }
+
     public function update(Request $request, $id) {
         $result = null;
 
