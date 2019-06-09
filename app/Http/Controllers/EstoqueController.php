@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Produto;
 use App\Movimentacao;
 use App\ProdutoMovimentacao;
+use Illuminate\Support\Carbon;
 
 class EstoqueController extends Controller
 {
@@ -19,29 +20,10 @@ class EstoqueController extends Controller
         ]; 
     }
 
-    public function listarMovimentacoes(Request $request) {
-        $movimentacoes = Movimentacao::with('usuario');
-        $dates = $this->validateWith([
-            'start_date' => 'date',
-            'end_date'   => 'date'
-        ], $request);
-
-        if (array_key_exists('start_date', $dates)) {
-            $start = Carbon::parse($dates['start_date'])
-                        ->startOfDay()
-                        ->toDateTimeString();
-            $movimentacoes->whereDate('dthr_movimentacao', '>=', $start);
-        }
-
-        if (array_key_exists('end_date', $dates)) {
-            $end = Carbon::parse($dates['end_date'])
-                        ->endOfDay()
-                        ->toDateTimeString();
-            $movimentacoes->whereDate('dthr_movimentacao', '<=', $end);
-        }
-
-        $movimentacoes->orderBy('dthr_movimentacao', 'DESC')
-                    ->get();
+    public function listarMovimentacoes() {
+        $movimentacoes = Movimentacao::with('usuario')
+                                    ->orderBy('dthr_movimentacao', 'DESC')
+                                    ->get();
 
         return response()->json([
             'status' => 'ok',

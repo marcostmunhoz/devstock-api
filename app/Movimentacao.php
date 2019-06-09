@@ -17,6 +17,6 @@ class Movimentacao extends CustomModel
     }
 
     public function usuario() {
-        return $this->belongsTo('users', 'id_usuario', 'id_usuario');
+        return $this->belongsTo(User::class, 'id_usuario', 'id_usuario');
     }
 }
