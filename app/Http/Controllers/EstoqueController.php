@@ -22,7 +22,7 @@ class EstoqueController extends Controller
 
     public function listarMovimentacoes() {
         $movimentacoes = Movimentacao::with('usuario')
-                                    ->orderBy('dthr_movimentacao', 'DESC')
+                                    ->orderByRaw('STR_TO_DATE(dthr_movimentacao, "%Y-%m-%d %h:%i:%s) DESC')
                                     ->get();
 
         return response()->json([
