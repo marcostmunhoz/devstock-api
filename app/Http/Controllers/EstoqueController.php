@@ -19,22 +19,29 @@ class EstoqueController extends Controller
         ]; 
     }
 
-    public function listarMovimentacoes($idProduto) {
-        $produto = Produto::find($idProduto);
+    public function listarMovimentacoes(Request $request) {
+        $movimentacoes = Movimentacao::with('usuario');
+        $dates = $this->validateWith([
+            'start_date' => 'date',
+            'end_date'   => 'date'
+        ], $request);
 
-        if (!$produto || $produto->flg_status == 2) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Produto não encontrado'
-            ], 404);
+        if (array_key_exists('start_date', $dates)) {
+            $start = Carbon::parse($dates['start_date'])
+                        ->startOfDay()
+                        ->toDateTimeString();
+            $movimentacoes->whereDate('dthr_movimentacao', '>=', $start);
         }
 
-        $movimentacoes = Movimentacao::select('movimentacoes.*')
-                                    ->join('produtos_movimentacoes', 'movimentacoes.id_movimentacao', '=', 'produtos_movimentacoes.id_movimentacao')
-                                    ->where('id_produto', '=', $idProduto)
-                                    ->orderBy('dthr_movimentacao', 'ASC')
-                                    ->with('produtosMovimentacao')
-                                    ->get();
+        if (array_key_exists('end_date', $dates)) {
+            $end = Carbon::parse($dates['end_date'])
+                        ->endOfDay()
+                        ->toDateTimeString();
+            $movimentacoes->whereDate('dthr_movimentacao', '<=', $end);
+        }
+
+        $movimentacoes->orderBy('dthr_movimentacao', 'DESC')
+                    ->get();
 
         return response()->json([
             'status' => 'ok',
