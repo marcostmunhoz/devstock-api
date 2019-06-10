@@ -32,7 +32,7 @@ class EstoqueController extends Controller
         ]);
     }
 
-    public function show($id) {
+    public function showMovimentacao($id) {
         $movimentacao = Movimentacao::with([ 'produtosMovimentacao', 'usuario' ])
                                     ->find($id);
 

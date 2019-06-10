@@ -51,7 +51,7 @@ Route::group([ 'middleware' => [ 'jwt.auth' ] ], function() {
     //Rotas para a tela de estoque
     Route::group([ 'prefix' => '/estoque' ], function() {
         Route::get('/movimentacoes', 'EstoqueController@listarMovimentacoes');
-        Route::get('/movimentacao/{id}', 'EstoqueController@show');
+        Route::get('/movimentacao/{id}', 'EstoqueController@showMovimentacao');
         Route::post('/realizar-movimentacao', 'EstoqueController@realizarMovimentacao');
     });
 });
