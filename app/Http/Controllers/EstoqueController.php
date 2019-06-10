@@ -12,11 +12,12 @@ class EstoqueController extends Controller
 {
     public function __construct() {
         $this->insertRules = [
-            'tp_movimentacao'    => 'required|integer|in:1,2',
-            'ds_movimentacao'    => 'required|string|max:50',
-            'id_produto'         => 'required|integer|exists:produtos,id_produto',
-            'nr_qtd_movimentada' => 'required|integer|min:1',
-            'vlr_unitario'       => 'required|numeric|min:0'
+            'tp_movimentacao'               => 'required|integer|in:1,2',
+            'ds_movimentacao'               => 'required|string|max:50',
+            'produtos'                      => 'required|array',
+            'produtos.*.id_produto'         => 'required|integer|exists:produtos,id_produto',
+            'produtos.*.nr_qtd_movimentada' => 'required|integer|min:1',
+            'produtos.*.vlr_unitario'       => 'required|numeric|min:0'
         ]; 
     }
 
@@ -31,25 +32,26 @@ class EstoqueController extends Controller
         ]);
     }
 
+    public function show($id) {
+        $movimentacao = Movimentacao::with([ 'produtosMovimentacao', 'usuario' ])
+                                    ->find($id);
+
+        if (!$movimentacao) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Movimentação não encontrada.'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'ok',
+            'data'   => $movimentacao
+        ]);
+    }
+
     public function realizarMovimentacao(Request $request) {
         try {
             $data = $this->validateWith($this->insertRules, $request);
-
-            $produto = Produto::find($data['id_produto']);
-            if (!$produto || $produto->flg_status == 2) {
-                return response::json([
-                    'status'  => 'error',
-                    'message' => 'Produto não encontrado'
-                ], 404);
-            } elseif ($data['tp_movimentacao'] == 2 && $produto->nr_qtd_estocada < $data['nr_qtd_movimentada']) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => "O produto $produto->cod_produto | $produto->nm_produto não possui quantidade suficiente em estoque",
-                    'data' => [
-                        'nr_qtd_estocada' => $produto->nr_qtd_estocada
-                    ]
-                ]);
-            }
 
             \DB::beginTransaction();
             $movimentacao = Movimentacao::create([
@@ -59,22 +61,46 @@ class EstoqueController extends Controller
                 'dthr_movimentacao' => array_key_exists('dthr_movimentacao', $data) ? $data['dthr_movimentacao'] : date('Y-m-d H:i:s')
             ]);
 
-            ProdutoMovimentacao::create([
-                'id_produto'         => $produto->id_produto,
-                'id_movimentacao'    => $movimentacao->id_movimentacao,
-                'nr_qtd_movimentada' => $data['nr_qtd_movimentada'],
-                'vlr_unitario'       => $data['vlr_unitario']
-            ]);
-
-            if ($data['tp_movimentacao'] == 1) {
-                $produto->nr_qtd_estocada += $data['nr_qtd_movimentada'];
-            } else {
-                $produto->nr_qtd_estocada -= $data['nr_qtd_movimentada'];
+            if (count($data['produtos']) == 0) {
+                throw new Exception('Nenhum produto submetido.');
             }
 
-            $produto->save();
+            foreach ($data['produtos'] as $prod) {
+                $produto = Produto::find($prod['id_produto']);
+                if (!$produto || $produto->flg_status == 2) {
+                    return response::json([
+                        'status'  => 'error',
+                        'message' => 'Produto não encontrado'
+                    ], 404);
+                } elseif ($data['tp_movimentacao'] == 2 && $produto->nr_qtd_estocada < $prod['nr_qtd_movimentada']) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => "O produto $produto->cod_produto | $produto->nm_produto não possui quantidade suficiente em estoque",
+                        'data' => [
+                            'nr_qtd_estocada' => $produto->nr_qtd_estocada
+                        ]
+                    ]);
+                }
+
+                ProdutoMovimentacao::create([
+                    'id_produto'         => $produto->id_produto,
+                    'id_movimentacao'    => $movimentacao->id_movimentacao,
+                    'nr_qtd_movimentada' => $prod['nr_qtd_movimentada'],
+                    'vlr_unitario'       => $prod['vlr_unitario']
+                ]);
+
+                if ($data['tp_movimentacao'] == 1) {
+                    $produto->nr_qtd_estocada += $data['nr_qtd_movimentada'];
+                } else {
+                    $produto->nr_qtd_estocada -= $data['nr_qtd_movimentada'];
+                }
+
+                $produto->save();
+            }
+
             \DB::commit();
         } catch (\Illuminate\Validation\ValidationException $ex) {
+            \DB::rollback();
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Ocorreu um erro na validação.',
