@@ -90,9 +90,9 @@ class EstoqueController extends Controller
                 ]);
 
                 if ($data['tp_movimentacao'] == 1) {
-                    $produto->nr_qtd_estocada += $data['nr_qtd_movimentada'];
+                    $produto->nr_qtd_estocada += $prod['nr_qtd_movimentada'];
                 } else {
-                    $produto->nr_qtd_estocada -= $data['nr_qtd_movimentada'];
+                    $produto->nr_qtd_estocada -= $prod['nr_qtd_movimentada'];
                 }
 
                 $produto->save();
