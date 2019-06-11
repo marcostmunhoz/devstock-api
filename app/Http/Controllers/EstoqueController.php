@@ -116,7 +116,8 @@ class EstoqueController extends Controller
 
         return response()->json([
             'status'  => 'ok',
-            'message' => 'Movimentação realizada com sucesso.'
+            'message' => 'Movimentação realizada com sucesso.',
+            'data' => $movimentacao->refresh()->load([ 'usuario', 'produtosMovimentacao' ])
         ]);
     }
 }
