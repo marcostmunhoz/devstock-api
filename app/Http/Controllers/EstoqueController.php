@@ -12,12 +12,12 @@ class EstoqueController extends Controller
 {
     public function __construct() {
         $this->insertRules = [
-            'tp_movimentacao'               => 'required|integer|in:1,2',
-            'ds_movimentacao'               => 'required|string|max:50',
-            'produtos'                      => 'required|array',
-            'produtos.*.id_produto'         => 'required|integer|exists:produtos,id_produto',
-            'produtos.*.nr_qtd_movimentada' => 'required|integer|min:1',
-            'produtos.*.vlr_unitario'       => 'required|numeric|min:0'
+            'tp_movimentacao'      => 'required|integer|in:1,2',
+            'ds_movimentacao'      => 'required|string|max:50',
+            'produtosMovimentacao' => 'required|array',
+            'produtosMovimentacao.*.id_produto'         => 'required|integer|exists:produtos,id_produto',
+            'produtosMovimentacao.*.nr_qtd_movimentada' => 'required|integer|min:1',
+            'produtosMovimentacao.*.vlr_unitario'       => 'required|numeric|min:0'
         ]; 
     }
 
