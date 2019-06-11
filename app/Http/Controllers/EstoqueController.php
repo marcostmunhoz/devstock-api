@@ -65,7 +65,7 @@ class EstoqueController extends Controller
                 throw new Exception('Nenhum produto submetido.');
             }
 
-            foreach ($data['produtos'] as $prod) {
+            foreach ($data['produtos_movimentacao'] as $prod) {
                 $produto = Produto::find($prod['id_produto']);
                 if (!$produto || $produto->flg_status == 2) {
                     return response::json([
