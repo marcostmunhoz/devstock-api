@@ -79,7 +79,7 @@ class EstoqueController extends Controller
                         'data' => [
                             'nr_qtd_estocada' => $produto->nr_qtd_estocada
                         ]
-                    ]);
+                    ], 400);
                 }
 
                 ProdutoMovimentacao::create([
@@ -111,7 +111,7 @@ class EstoqueController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'message' => $ex->getMessage()
-            ]);
+            ], 500);
         }
 
         return response()->json([
