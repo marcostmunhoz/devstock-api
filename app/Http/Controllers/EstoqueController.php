@@ -61,7 +61,7 @@ class EstoqueController extends Controller
                 'dthr_movimentacao' => array_key_exists('dthr_movimentacao', $data) ? $data['dthr_movimentacao'] : date('Y-m-d H:i:s')
             ]);
 
-            if (count($data['produtos']) == 0) {
+            if (count($data['produtos_movimentacao']) == 0) {
                 throw new Exception('Nenhum produto submetido.');
             }
 
