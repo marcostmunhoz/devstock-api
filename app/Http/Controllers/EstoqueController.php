@@ -15,9 +15,9 @@ class EstoqueController extends Controller
             'tp_movimentacao'       => 'required|integer|in:1,2',
             'ds_movimentacao'       => 'required|string|max:50',
             'produtos_movimentacao' => 'required|array',
-            'produtos_movimentacao.*.id_produto'          => 'required|integer|exists:produtos,id_produto',
-            'produtos_movimentacao.*.nr_qtd_movimentacao' => 'required|integer|min:1',
-            'produtos_movimentacao.*.vlr_unitario'        => 'required|numeric|min:0'
+            'produtos_movimentacao.*.id_produto'         => 'required|integer|exists:produtos,id_produto',
+            'produtos_movimentacao.*.nr_qtd_movimentada' => 'required|integer|min:1',
+            'produtos_movimentacao.*.vlr_unitario'       => 'required|numeric|min:0'
         ]; 
     }
 
