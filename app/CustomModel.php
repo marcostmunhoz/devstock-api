@@ -9,10 +9,10 @@ class CustomModel extends Model {
     const UPDATED_AT = 'dt_edicao';
 
     public function getDtCadastroAttribute($value) {
-        return \Carbon\Carbon::parse($value, 'UTC')->timezone('America/Sao_Paulo');
+        return \Carbon\Carbon::parse($value, 'UTC')->timezone('America/Sao_Paulo')->format('Y-m-d H:i:s');
     }
 
     public function getDtEdicaoAttribute($value) {
-        return \Carbon\Carbon::parse($value, 'UTC')->timezone('America/Sao_Paulo');
+        return \Carbon\Carbon::parse($value, 'UTC')->timezone('America/Sao_Paulo')->format('Y-m-d H:i:s');
     }
 }
