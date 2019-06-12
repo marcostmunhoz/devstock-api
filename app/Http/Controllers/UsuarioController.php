@@ -209,7 +209,7 @@ class UsuarioController extends Controller
                 ], 404);
             }
 
-            if (!Hash::check($fields['old_password'], $result->password)) {
+            if (!\Hash::check($fields['old_password'], $result->password)) {
                 return response()->json([
                     'status'  => 'error',
                     'message' => 'A senha atual não confere.'
