@@ -196,7 +196,8 @@ class UsuarioController extends Controller
 
         try {
             $fields = $this->validateWith([
-                'password' => 'required|string|min:6'
+                'old_password' => 'required|string',
+                'password'     => 'required|string|min:8'
             ], $request);
 
             $result = $this->model::find($id);
@@ -206,6 +207,13 @@ class UsuarioController extends Controller
                     'status'  => 'error',
                     'message' => "$this->friendlyName não encontrado(a)."
                 ], 404);
+            }
+
+            if (!Hash::check($fields['old_password'], $result->password)) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'A senha atual não confere.'
+                ], 401);
             }
 
             $result->password = bcrypt($fields['password']);
